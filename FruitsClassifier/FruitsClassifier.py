@@ -63,5 +63,22 @@ else:
             validation_data = val_gen,
             steps_per_epoch = 100,
             epochs = 100,
-            validation_steps = 50,
+            validation_steps = 10,
             verbose = 1)
+    import matplotlib.pyplot as plt
+    acc = history.history['acc']
+    val_acc = history.history['val_acc']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs = range(len(acc))
+
+    plt.plot(epochs, acc, 'r', label='Training accuracy')
+    plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
+    plt.title('Training and validation accuracy')
+    plt.legend(loc=0)
+    plt.figure()
+
+
+    plt.show()
+
