@@ -86,3 +86,11 @@ else:
 
     plt.show()
 
+
+    plt.plot(epochs, loss, 'r', label='Training Loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation Loss')
+    plt.title('Training and validation loss')
+    plt.legend()
+
+    plt.show()
+
