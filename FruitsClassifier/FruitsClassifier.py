@@ -17,6 +17,11 @@ else:
     from tensorflow.keras.optimizers import RMSprop
     from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+    print("Select the image you want to classify")
+    root = Tk()
+    root.withdraw()
+    IMAGE_PATH = filedialog.askopenfilename()
+    IMAGE_PATH=converttoWinPath(IMAGE_PATH)
     print("Select the folder where dataset is located")
     root = Tk()
     root.withdraw()
@@ -25,13 +30,14 @@ else:
     TRAIN_DIR=converttoWinPath(TRAIN_DIR)           #cause I cant use \ as its an escape sequence in VS
     VAL_DIR=DATASET_PATH+"\Test"
     VAL_DIR=converttoWinPath(VAL_DIR)
+    labels=int(114)
 
     train_datagen= ImageDataGenerator(rescale = 1./255.,
-                                   rotation_range = 40,
-                                   width_shift_range = 0.2,
-                                   height_shift_range = 0.2,    #image augmentation for training dataset
-                                   shear_range = 0.2,
-                                   zoom_range = 0.2,
+                                   rotation_range = 45,
+                                   width_shift_range = 0.1,
+                                   height_shift_range = 0.1,    #image augmentation for training dataset
+                                   shear_range = 0.1,
+                                   zoom_range = 0.1,
                                    horizontal_flip = True)
 
     val_datagen= ImageDataGenerator( rescale = 1./255. ) #we dont need to augment validation dataset
@@ -52,7 +58,7 @@ else:
     tf.keras.layers.MaxPooling2D(2, 2),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation=tf.nn.relu),
-    tf.keras.layers.Dense(114, activation=tf.nn.softmax)])
+    tf.keras.layers.Dense(labels, activation=tf.nn.softmax)])
 
     model.compile(optimizer=RMSprop(lr=0.001), loss='categorical_crossentropy', metrics=['acc'])
 
@@ -62,7 +68,7 @@ else:
             train_gen,
             validation_data = val_gen,
             steps_per_epoch = 100,
-            epochs = 100,
+            epochs = 50,
             validation_steps = 10,
             verbose = 1)
     import matplotlib.pyplot as plt
@@ -86,11 +92,27 @@ else:
 
     plt.show()
 
+    #This part contains code for real world testing of images
+    import numpy as np
+    from keras.preprocessing import image
 
-    plt.plot(epochs, loss, 'r', label='Training Loss')
-    plt.plot(epochs, val_loss, 'b', label='Validation Loss')
-    plt.title('Training and validation loss')
-    plt.legend()
+    root = Tk()
+    root.withdraw()
+    IMAGE_PATH = filedialog.askopenfilename()
+    IMAGE_PATH=converttoWinPath(IMAGE_PATH)
+    img=image.load_img(IMAGE_PATH,target_size=(100,100))
+    x=image.img_to_array(img)
+    x=np.expand_dims(x,axis=0)
 
-    plt.show()
+    images=np.vstack([x])
+    classes=model.predict(images,batch_size=10)
+    max=classes[0]
+    predicted_label=(int)
+    for i in range (1,labels):
+        if classes[i]>max:
+            predicted_label=i
+    print(classes[predicted_label])
 
+
+
+    
