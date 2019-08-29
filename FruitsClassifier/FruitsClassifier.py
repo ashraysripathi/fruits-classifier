@@ -78,7 +78,7 @@ else:
     val_loss = history.history['val_loss']
 
     epochs = range(len(acc))
-
+    #some graphs for clarity
     plt.plot(epochs, acc, 'r', label='Training accuracy')
     plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
     plt.title('Training and validation accuracy')
@@ -92,7 +92,7 @@ else:
 
     plt.show()
 
-    #This part contains code for real world testing of images
+    #This part contains code for real world testing of images still a work in progress doesnt work atm
     import numpy as np
     from keras.preprocessing import image
 
