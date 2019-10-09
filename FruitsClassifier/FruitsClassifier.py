@@ -1,3 +1,4 @@
+#realized there are easier ways to do this but left it in cause I was tunnel visioining
 def converttoWinPath(s):
     s=s.replace('\\','\\\\')
     return s
